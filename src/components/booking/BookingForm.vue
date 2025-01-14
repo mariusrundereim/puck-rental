@@ -2,7 +2,8 @@
 import { ref } from "vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
-import Calendar from "primevue/calendar";
+// import Calendar from "primevue/calendar";
+import DatePicker from "primevue/datepicker";
 import AutoComplete from "primevue/autocomplete";
 import InputNumber from "primevue/inputnumber";
 import Button from "primevue/button";
@@ -72,12 +73,14 @@ const onSubmit = handleSubmit((values) => {
           <label class="block text-sm font-medium text-gray-700"
             >Pickup Date & Time</label
           >
-          <Calendar
+          <DatePicker v-model="date" />
+          <!-- <Calendar
             v-model="values.pickupDate"
             showTime
             class="w-full"
             :minDate="new Date()"
-          />
+          /> -->
+
           <small class="text-red-500">{{ errors.pickupDate }}</small>
         </div>
 
@@ -85,12 +88,7 @@ const onSubmit = handleSubmit((values) => {
           <label class="block text-sm font-medium text-gray-700"
             >Drop-off Date & Time</label
           >
-          <Calendar
-            v-model="values.dropoffDate"
-            showTime
-            class="w-full"
-            :minDate="values.pickupDate || new Date()"
-          />
+          <DatePicker v-model="date" />
           <small class="text-red-500">{{ errors.dropoffDate }}</small>
         </div>
 
