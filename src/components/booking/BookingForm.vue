@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useForm } from "vee-validate";
+import { onClickOutside } from "@vueuse/core";
 import * as yup from "yup";
 
 // Add these interfaces at the top of your script
@@ -14,6 +15,19 @@ interface FormValues {
   driverAge: number | null;
   hasLicense: boolean;
 }
+
+const target = ref(null);
+onClickOutside(target, (event) => console.log(event));
+
+// Refs for input handling
+const tempPickupInput = ref("");
+const tempDropoffInput = ref("");
+
+// Click outside handler
+const closeDropdowns = () => {
+  filteredPickupLocations.value = [];
+  filteredDropoffLocations.value = [];
+};
 
 // Set initial values
 const initialValues: FormValues = {
@@ -77,6 +91,12 @@ const filteredDropoffLocations = ref([]);
 
 // Filter location
 const filterLocations = (inputValue: string, field: "pickup" | "dropoff") => {
+  if (field === "pickup") {
+    tempPickupInput.value = inputValue;
+  } else {
+    tempDropoffInput.value = inputValue;
+  }
+
   if (!inputValue) {
     if (field === "pickup") {
       filteredPickupLocations.value = [];
@@ -114,7 +134,7 @@ const onSubmit = handleSubmit((values) => {
           </label>
           <input
             type="text"
-            v-model="values.pickupLocation"
+            :value="tempPickupInput"
             @input="(event) => filterLocations((event.target as HTMLInputElement).value, 'pickup')"
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Skriv inn hentested"
@@ -125,10 +145,12 @@ const onSubmit = handleSubmit((values) => {
           >
             <div
               v-for="location in filteredPickupLocations"
+              ef="target"
               :key="location"
               @click="
                 () => {
                   setFieldValue('pickupLocation', location);
+                  tempPickupInput = location;
                   filteredPickupLocations.value = [];
                 }
               "
@@ -147,7 +169,7 @@ const onSubmit = handleSubmit((values) => {
           </label>
           <input
             type="text"
-            v-model="values.dropoffLocation"
+            :value="tempDropoffInput"
             @input="(event) => filterLocations((event.target as HTMLInputElement).value, 'dropoff')"
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Skriv inn leveringssted"
@@ -162,6 +184,7 @@ const onSubmit = handleSubmit((values) => {
               @click="
                 () => {
                   setFieldValue('dropoffLocation', location);
+                  tempDropoffInput = location;
                   filteredDropoffLocations.value = [];
                 }
               "
