@@ -12,11 +12,10 @@ import BookingForm from "../components/booking/BookingForm.vue";
         <div class="container mx-auto h-full flex items-center">
           <div class="max-w-2xl text-white">
             <h1 class="text-4xl md:text-6xl font-bold mb-6">
-              Your Journey Starts Here
+              Start til bilreise her
             </h1>
             <p class="text-xl mb-8">
-              Discover our premium fleet of vehicles and experience hassle-free
-              car rental
+              Finn det perfekte kjøretøyet for din neste reise.
             </p>
           </div>
         </div>
@@ -30,24 +29,24 @@ import BookingForm from "../components/booking/BookingForm.vue";
 
     <!-- Features Section -->
     <div class="container mx-auto px-4 py-16">
-      <h2 class="text-3xl font-bold text-center mb-12">Why Choose Us</h2>
+      <h2 class="text-3xl font-bold text-center mb-12">Hvorfor velge oss</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="text-center">
           <i class="pi pi-car text-4xl text-primary mb-4"></i>
           <h3 class="text-xl font-semibold mb-2">Premium Fleet</h3>
           <p class="text-gray-600">
-            Wide selection of well-maintained vehicles
+            Bredt utvalg av godt vedlikeholdte kjøretøy
           </p>
         </div>
         <div class="text-center">
           <i class="pi pi-clock text-4xl text-primary mb-4"></i>
           <h3 class="text-xl font-semibold mb-2">24/7 Support</h3>
-          <p class="text-gray-600">Round-the-clock customer assistance</p>
+          <p class="text-gray-600">Døgnåpen kundestøtte</p>
         </div>
         <div class="text-center">
           <i class="pi pi-check-circle text-4xl text-primary mb-4"></i>
-          <h3 class="text-xl font-semibold mb-2">Easy Booking</h3>
-          <p class="text-gray-600">Simple and secure reservation process</p>
+          <h3 class="text-xl font-semibold mb-2">Enkel Booking</h3>
+          <p class="text-gray-600">Enkel og sikker reservasjonsprosess</p>
         </div>
       </div>
     </div>

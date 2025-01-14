@@ -3,42 +3,98 @@ import { ref } from "vue";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 
+// Add these interfaces at the top of your script
+interface FormValues {
+  pickupLocation: string;
+  dropoffLocation: string;
+  pickupDate: string;
+  pickupTime: string;
+  dropoffDate: string;
+  dropoffTime: string;
+  driverAge: number | null;
+  hasLicense: boolean;
+}
+
+// Set initial values
+const initialValues: FormValues = {
+  pickupLocation: "",
+  dropoffLocation: "",
+  pickupDate: "",
+  pickupTime: "",
+  dropoffDate: "",
+  dropoffTime: "",
+  driverAge: null,
+  hasLicense: false,
+};
+
 const schema = yup.object({
-  pickupLocation: yup.string().required("Pickup location is required"),
-  dropoffLocation: yup.string().required("Drop-off location is required"),
-  pickupDate: yup.date().required("Pickup date is required"),
-  pickupTime: yup.string().required("Pickup time is required"),
-  dropoffDate: yup.date().required("Drop-off date is required"),
-  dropoffTime: yup.string().required("Drop-off time is required"),
+  pickupLocation: yup.string().required("Hentested er påkrevd"),
+  dropoffLocation: yup.string().required("Leveringssted er påkrevd"),
+  pickupDate: yup.string().required("Hentedato er påkrevd"),
+  pickupTime: yup.string().required("Hentetid er påkrevd"),
+  dropoffDate: yup.string().required("Leveringsdato er påkrevd"),
+  dropoffTime: yup.string().required("Leveringstid er påkrevd"),
   driverAge: yup
     .number()
-    .min(18, "Must be at least 18 years old")
-    .required("Age is required"),
-  hasLicense: yup.boolean().oneOf([true], "Valid driver's license is required"),
+    .nullable()
+    .min(18, "Du må være minst 18 år")
+    .required("Alder er påkrevd"),
+  hasLicense: yup.boolean().oneOf([true], "Gyldig førerkort er påkrevd"),
 });
 
-const { handleSubmit, values, errors } = useForm({
+// Handle form submission
+const { handleSubmit, values, errors, setFieldValue } = useForm({
   validationSchema: schema,
+  initialValues,
 });
 
 const locations = ref([
-  "JFK Airport",
-  "LaGuardia Airport",
-  "Manhattan Downtown",
-  "Brooklyn",
-  "Queens",
+  "Oslo Sentralstasjon",
+  "Oslo Lufthavn",
+  "Bergen Sentrum",
+  "Trondheim Sentrum",
+  "Stavanger Lufthavn",
+  "Tromsø Sentrum",
+  "Kristiansand Sentrum",
+  "Fredrikstad Sentrum",
+  "Drammen Sentrum",
+  "Sandnes Sentrum",
+  "Skien Sentrum",
+  "Arendal Sentrum",
+  "Molde Sentrum",
+  "Hamar Sentrum",
+  "Lillehammer Sentrum",
+  "Gjøvik Sentrum",
+  "Haugesund Sentrum",
+  "Ålesund Sentrum",
+  "Harstad Sentrum",
+  "Bodø Sentrum",
+  "Narvik Sentrum",
 ]);
 
-const filteredLocations = ref([]);
+const filteredPickupLocations = ref([]);
+const filteredDropoffLocations = ref([]);
 
-const filterLocations = (event: string, field: string) => {
-  if (!event) {
-    filteredLocations.value = [];
+// Filter location
+const filterLocations = (inputValue: string, field: "pickup" | "dropoff") => {
+  if (!inputValue) {
+    if (field === "pickup") {
+      filteredPickupLocations.value = [];
+    } else {
+      filteredDropoffLocations.value = [];
+    }
     return;
   }
-  filteredLocations.value = locations.value.filter((location) =>
-    location.toLowerCase().includes(event.toLowerCase())
+
+  const filtered = locations.value.filter((location) =>
+    location.toLowerCase().includes(inputValue.toLowerCase())
   );
+
+  if (field === "pickup") {
+    filteredPickupLocations.value = filtered;
+  } else {
+    filteredDropoffLocations.value = filtered;
+  }
 };
 
 const onSubmit = handleSubmit((values) => {
@@ -48,29 +104,34 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <div class="bg-white rounded-lg shadow-lg p-6">
-    <h2 class="text-2xl font-bold mb-6">Book Your Car</h2>
+    <h2 class="text-2xl font-bold mb-6">Bestill Din Bil</h2>
     <form @submit="onSubmit" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Pickup Location -->
         <div class="relative">
           <label class="block text-sm font-medium text-gray-700 mb-1">
-            Pickup Location
+            Hentested
           </label>
           <input
             type="text"
             v-model="values.pickupLocation"
-            @input="(event) => filterLocations(event.target.value, 'pickup')"
+            @input="(event) => filterLocations((event.target as HTMLInputElement).value, 'pickup')"
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter pickup location"
+            placeholder="Skriv inn hentested"
           />
           <div
-            v-if="filteredLocations.length"
-            class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg"
+            v-if="filteredPickupLocations.length"
+            class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
           >
             <div
-              v-for="location in filteredLocations"
+              v-for="location in filteredPickupLocations"
               :key="location"
-              @click="values.pickupLocation = location"
+              @click="
+                () => {
+                  setFieldValue('pickupLocation', location);
+                  filteredPickupLocations.value = [];
+                }
+              "
               class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
             >
               {{ location }}
@@ -82,23 +143,28 @@ const onSubmit = handleSubmit((values) => {
         <!-- Dropoff Location -->
         <div class="relative">
           <label class="block text-sm font-medium text-gray-700 mb-1">
-            Drop-off Location
+            Leveringssted
           </label>
           <input
             type="text"
             v-model="values.dropoffLocation"
-            @input="(event) => filterLocations(event.target.value, 'dropoff')"
+            @input="(event) => filterLocations((event.target as HTMLInputElement).value, 'dropoff')"
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter drop-off location"
+            placeholder="Skriv inn leveringssted"
           />
           <div
-            v-if="filteredLocations.length"
-            class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg"
+            v-if="filteredDropoffLocations.length"
+            class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
           >
             <div
-              v-for="location in filteredLocations"
+              v-for="location in filteredDropoffLocations"
               :key="location"
-              @click="values.dropoffLocation = location"
+              @click="
+                () => {
+                  setFieldValue('dropoffLocation', location);
+                  filteredDropoffLocations.value = [];
+                }
+              "
               class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
             >
               {{ location }}
@@ -110,12 +176,13 @@ const onSubmit = handleSubmit((values) => {
         <!-- Pickup Date & Time -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">
-            Pickup Date & Time
+            Hentedato & Tid
           </label>
           <div class="flex gap-2">
             <input
               type="date"
               v-model="values.pickupDate"
+              :min="new Date().toISOString().split('T')[0]"
               class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <input
@@ -132,12 +199,13 @@ const onSubmit = handleSubmit((values) => {
         <!-- Dropoff Date & Time -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">
-            Drop-off Date & Time
+            Leveringsdato & Tid
           </label>
           <div class="flex gap-2">
             <input
               type="date"
               v-model="values.dropoffDate"
+              :min="values.pickupDate || new Date().toISOString().split('T')[0]"
               class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <input
@@ -154,14 +222,14 @@ const onSubmit = handleSubmit((values) => {
         <!-- Driver's Age -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">
-            Driver's Age
+            Sjåførens Alder
           </label>
           <input
             type="number"
             v-model="values.driverAge"
             min="18"
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter your age"
+            placeholder="Skriv inn din alder"
           />
           <small class="text-red-500">{{ errors.driverAge }}</small>
         </div>
@@ -175,7 +243,7 @@ const onSubmit = handleSubmit((values) => {
           class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
         />
         <label class="ml-2 block text-sm text-gray-700">
-          I confirm that I have a valid driver's license
+          Jeg bekrefter at jeg har gyldig førerkort
         </label>
       </div>
       <small class="text-red-500">{{ errors.hasLicense }}</small>
