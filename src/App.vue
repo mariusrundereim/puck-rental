@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Navbar from "./components/layout/Navbar.vue";
+</script>
 
 <template>
-  <div>
-    <h1 class="text-3xl font-bold underline">Hello world!</h1>
+  <div class="min-h-screen flex flex-col">
+    <Navbar />
   </div>
 </template>
