@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Button from "primevue/button";
-import Menu from "primevue/menu";
 
-const menu = ref();
+const isMenuOpen = ref(false);
 const items = [
   { label: "Home", to: "/" },
   { label: "About Us", to: "/about" },
@@ -12,6 +10,10 @@ const items = [
   { label: "FAQ", to: "/faq" },
   { label: "Contact", to: "/contact" },
 ];
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
 </script>
 
 <template>
@@ -28,29 +30,88 @@ const items = [
             v-for="item in items"
             :key="item.label"
             :to="item.to"
-            class="text-gray-700 hover:text-primary transition-colors"
+            class="text-gray-700 hover:text-primary transition-colors duration-200"
           >
             {{ item.label }}
           </router-link>
         </div>
 
-        <div class="flex items-center space-x-4">
+        <!-- Auth Buttons -->
+        <div class="hidden md:flex items-center space-x-4">
           <router-link to="/auth">
-            <Button label="Login" class="p-button-text" />
+            <button
+              class="px-4 py-2 text-gray-700 hover:text-primary hover:bg-gray-100 rounded-md transition-colors duration-200"
+            >
+              Login
+            </button>
           </router-link>
           <router-link to="/auth?mode=register">
-            <Button label="Register" />
+            <button
+              class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors duration-200"
+            >
+              Register
+            </button>
           </router-link>
         </div>
 
         <!-- Mobile Menu Button -->
-        <div class="md:hidden">
-          <Button
-            icon="pi pi-bars"
-            @click="(event) => menu.toggle(event)"
-            class="p-button-text"
-          />
-          <Menu ref="menu" :model="items" :popup="true" />
+        <button
+          @click="toggleMenu"
+          class="md:hidden p-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
+        >
+          <svg
+            class="w-6 h-6 text-gray-700"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              v-if="!isMenuOpen"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+            <path
+              v-else
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div v-show="isMenuOpen" class="md:hidden" @click="isMenuOpen = false">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+          <router-link
+            v-for="item in items"
+            :key="item.label"
+            :to="item.to"
+            class="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-gray-100 rounded-md transition-colors duration-200"
+          >
+            {{ item.label }}
+          </router-link>
+
+          <!-- Mobile Auth Buttons -->
+          <div class="mt-4 space-y-2 px-3">
+            <router-link to="/auth" class="block">
+              <button
+                class="w-full px-4 py-2 text-gray-700 hover:text-primary hover:bg-gray-100 rounded-md transition-colors duration-200"
+              >
+                Login
+              </button>
+            </router-link>
+            <router-link to="/auth?mode=register" class="block">
+              <button
+                class="w-full px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors duration-200"
+              >
+                Register
+              </button>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
