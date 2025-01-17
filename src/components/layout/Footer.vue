@@ -7,7 +7,7 @@ import { ref } from "vue";
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between items-center">
         <div>
-          <p class="text-lg font-bold">CarRental</p>
+          <p class="text-lg font-bold">Puck Rental</p>
           <p class="text-sm">Rent a car with ease</p>
         </div>
         <div class="flex space-x-4">

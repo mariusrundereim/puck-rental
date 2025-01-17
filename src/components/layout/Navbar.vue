@@ -4,11 +4,11 @@ import { ref } from "vue";
 const isMenuOpen = ref(false);
 const items = [
   { label: "Home", to: "/" },
-  { label: "About Us", to: "/about" },
-  { label: "Vehicle Fleet", to: "/fleet" },
-  { label: "Locations", to: "/locations" },
-  { label: "FAQ", to: "/faq" },
-  { label: "Contact", to: "/contact" },
+  { label: "Om oss", to: "/about" },
+  { label: "Bilutleie", to: "/fleet" },
+  { label: "Lokasjoner", to: "/locations" },
+  { label: "Spørsmål og svar", to: "/faq" },
+  { label: "Kontakt", to: "/contact" },
 ];
 
 const toggleMenu = () => {
@@ -21,7 +21,7 @@ const toggleMenu = () => {
     <div class="container mx-auto px-4">
       <div class="flex justify-between items-center h-16">
         <router-link to="/" class="text-2xl font-bold text-primary">
-          CarRental
+          Puck Rental
         </router-link>
 
         <!-- Desktop Menu -->
@@ -42,7 +42,7 @@ const toggleMenu = () => {
             <button
               class="px-4 py-2 text-gray-700 hover:text-primary hover:bg-gray-100 rounded-md transition-colors duration-200"
             >
-              Login
+              Logg inn
             </button>
           </router-link>
           <router-link to="/auth?mode=register">
@@ -101,7 +101,7 @@ const toggleMenu = () => {
               <button
                 class="w-full px-4 py-2 text-gray-700 hover:text-primary hover:bg-gray-100 rounded-md transition-colors duration-200"
               >
-                Login
+                Logg inn
               </button>
             </router-link>
             <router-link to="/auth?mode=register" class="block">

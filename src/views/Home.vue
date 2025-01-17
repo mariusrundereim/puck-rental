@@ -9,7 +9,7 @@ import BookingForm from "../components/booking/BookingForm.vue";
       <div
         class="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-gray-900/50"
       >
-        <div class="container mx-auto h-full flex items-center">
+        <div class="container mx-auto h-full flex items-center px-12">
           <div class="max-w-2xl text-white">
             <h1 class="text-4xl md:text-6xl font-bold mb-6">
               Start til bilreise her

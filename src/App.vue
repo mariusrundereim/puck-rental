@@ -8,7 +8,6 @@ import BookingForm from "./components/booking/BookingForm.vue";
   <div class="min-h-screen flex flex-col">
     <Navbar />
     <main class="flex-grow">
-      <!-- <BookingForm /> -->
       <router-view />
     </main>
     <Footer />
