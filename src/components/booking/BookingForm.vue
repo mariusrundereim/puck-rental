@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, Ref } from "vue";
 import { useForm } from "vee-validate";
 import { onClickOutside } from "@vueuse/core";
 import * as yup from "yup";
@@ -16,12 +16,12 @@ interface FormValues {
   hasLicense: boolean;
 }
 
-const target = ref(null);
+const target: Ref<HTMLElement | null> = ref(null);
 onClickOutside(target, (event) => console.log(event));
 
 // Refs for input handling
-const tempPickupInput = ref("");
-const tempDropoffInput = ref("");
+const tempPickupInput: Ref<string> = ref("");
+const tempDropoffInput: Ref<string> = ref("");
 
 // Set initial values
 const initialValues: FormValues = {
@@ -80,8 +80,8 @@ const locations = ref([
   "Narvik Sentrum",
 ]);
 
-const filteredPickupLocations = ref([]);
-const filteredDropoffLocations = ref([]);
+const filteredPickupLocations: Ref<string[]> = ref([]);
+const filteredDropoffLocations: Ref<string[]> = ref([]);
 
 // Filter location
 const filterLocations = (inputValue: string, field: "pickup" | "dropoff") => {
@@ -105,9 +105,9 @@ const filterLocations = (inputValue: string, field: "pickup" | "dropoff") => {
   );
 
   if (field === "pickup") {
-    filteredPickupLocations.value = filtered;
+    filteredPickupLocations.value = filtered; // Issue
   } else {
-    filteredDropoffLocations.value = filtered;
+    filteredDropoffLocations.value = filtered; // Issue
   }
 };
 
@@ -145,7 +145,7 @@ const onSubmit = handleSubmit((values) => {
                 () => {
                   setFieldValue('pickupLocation', location);
                   tempPickupInput = location;
-                  filteredPickupLocations.value = [];
+                  filteredPickupLocations.value = []; // Issue
                 }
               "
               class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -179,7 +179,7 @@ const onSubmit = handleSubmit((values) => {
                 () => {
                   setFieldValue('dropoffLocation', location);
                   tempDropoffInput = location;
-                  filteredDropoffLocations.value = [];
+                  filteredDropoffLocations.value = []; // Issue
                 }
               "
               class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
