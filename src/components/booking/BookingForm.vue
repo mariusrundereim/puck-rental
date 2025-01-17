@@ -23,12 +23,6 @@ onClickOutside(target, (event) => console.log(event));
 const tempPickupInput = ref("");
 const tempDropoffInput = ref("");
 
-// Click outside handler
-const closeDropdowns = () => {
-  filteredPickupLocations.value = [];
-  filteredDropoffLocations.value = [];
-};
-
 // Set initial values
 const initialValues: FormValues = {
   pickupLocation: "",
